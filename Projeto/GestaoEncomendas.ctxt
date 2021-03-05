@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=GestaoEncomendas
+comment1.params=l\ u\ t\ e
+comment1.target=double\ custoT(Loja,\ Utilizador,\ Transportadora,\ Encomenda)
+comment2.params=l\ u\ v\ e
+comment2.target=double\ custoV(Loja,\ Utilizador,\ Voluntario,\ Encomenda)
+comment3.params=l\ u
+comment3.target=double\ inRangeLtoUkm(Loja,\ Utilizador)
+comment4.params=t\ l\ u
+comment4.target=double\ kmtotal(Transportadora,\ Loja,\ Utilizador)
+numComments=5

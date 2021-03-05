@@ -1,5 +1,6 @@
 import java.util.*;
-public class Utilizador
+import java.io.Serializable;
+public class Utilizador implements Serializable
 {
    //Variaveis
    private String codUtilizador;
@@ -9,16 +10,16 @@ public class Utilizador
    
    //Instancias
    public Utilizador(){
-    this.codUtilizador = "n/a";
-    this.nome = "n/a";
+    this.codUtilizador = "";
+    this.nome = "";
     this.gps = new GPS();
-    this.pwU = "0000";
+    this.pwU = "";
    }
    
-   public Utilizador(String codigo,String nome,GPS gp, String pw){
-    this.codUtilizador = codigo;
+   public Utilizador(String codU,String nome,GPS gps, String pw){
+    this.codUtilizador = codU;
     this.nome= nome;
-    this.gps = gp.clone();
+    this.gps = gps;
     this.pwU = pw;
     }
     
@@ -91,8 +92,8 @@ public class Utilizador
    
    //inserir pedidos de encomendas a uma loja, por parte de um utilizador
    
-   public void pedeEncomenda(Encomenda e, Loja l){
-          l.getPedidosEncomendas().put(this, e);
+   public void pedeEncomenda(Encomenda e, Login l){
+          l.getPedidosEncomendas().put(this.codUtilizador, e);
    }
     
     
@@ -100,30 +101,27 @@ public class Utilizador
        return true;
    }    
    
-   //inserir classificacao da encomenda
-   public void classificaEncomenda(Encomenda e,int classificacao){ 
-       e.setClassificacao(classificacao);
-    } 
    
    //classificar um voluntario
    public void classificaVoluntario(Voluntario v,int classificacao){ 
-    v.setClassificacao((v.getClassificacao() + classificacao )/2);
+       v.setClassificacao((v.getClassificacao() + classificacao)/2);
     }
    
    //classificar transportadora
    public void classificaTransportadora( Transportadora t , int classificacao){ 
-    t.setClassificacao((t.getClassificacao() + classificacao )/2);
+       t.setClassificacao((t.getClassificacao() + classificacao )/2);
     }
    
-   //toString SCSV
+   //CSV
    
    public String toStringCSV(){
        StringBuilder sb = new StringBuilder();
-       sb.append(this.codUtilizador).append(",")
+       sb.append("Utilizador:")
+         .append(this.codUtilizador).append(",")
          .append(this.nome).append(",")
-         .append(this.gps.getX()).append(",")
-         .append(this.gps.getY()).append(",")
+         .append(this.gps.getLongitude()).append(",")
+         .append(this.gps.getLatitude()).append(",")
          .append(this.pwU);
        return sb.toString();  
-   }    
+   }   
 }

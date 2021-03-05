@@ -1,5 +1,6 @@
 import java.util.*;
-public class Voluntario
+import java.io.Serializable;
+public class Voluntario implements Serializable
 {
   //Variavies  
   private String codVoluntario;
@@ -116,22 +117,32 @@ public class Voluntario
     return new Voluntario(this);
     }
   
-  //colocar o tempo que o voluntario demorou a entregar a encomenda 
-  public void adicionartempo(Encomenda e , int tempo ){ 
-    e.setTempo(tempo);
-    }
-    
+
   //toStringCSV
   
   public String toStringCSV(){
        StringBuilder sb = new StringBuilder();
-       sb.append(this.codVoluntario).append(",")
+       sb.append("Voluntario:")
+         .append(this.codVoluntario).append(",")
          .append(this.nomeV).append(",")
-         .append(this.gpsV.getX()).append(",")
-         .append(this.gpsV.getY()).append(",")
+         .append(this.gpsV.getLongitude()).append(",")
+         .append(this.gpsV.getLatitude()).append(",")
          .append(this.raio).append(",")
-         .append(this.classificacao).append(",")
-         .append(this.pwV);
+         .append(this.pwV).append(",")
+         .append(this.classificacao);
        return sb.toString();  
-   }    
+  }
+  
+  public boolean inRangeV(Loja l,Utilizador u) throws NullPointerException {
+        return (inRangeVtoL(l) && inRangeVtoU(u));
+    }
+  
+  
+  public boolean inRangeVtoL(Loja l){
+     return (Math.sqrt(Math.pow(this.gpsV.getLongitude() + l.getGPSL().getLongitude(), 2) - Math.pow(this.gpsV.getLatitude() + l.getGPSL().getLatitude(), 2)) < this.raio); 
+  }
+  
+  public boolean inRangeVtoU(Utilizador u){
+      return (Math.sqrt(Math.pow(this.gpsV.getLongitude() + u.getGPS().getLongitude(), 2) - Math.pow(this.gpsV.getLatitude() + u.getGPS().getLatitude(), 2)) < this.raio);
+    }    
 }

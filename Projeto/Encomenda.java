@@ -1,7 +1,7 @@
 import java.util.*;
 import java.util.ArrayList;
-
-public class Encomenda
+import java.io.Serializable;
+public class Encomenda implements Serializable
 {
     //Variaveis
     
@@ -10,9 +10,6 @@ public class Encomenda
     private String codLoja;
     private double peso;
     private ArrayList<LinhaEncomenda> linha;
-    private int classificacao;
-    private double custoTransporte;
-    private int tempo;
     
     //Instancias
     public Encomenda(){
@@ -21,20 +18,14 @@ public class Encomenda
         this.codLoja = "n/a";
         this.peso = 0.0;
         this.linha = new ArrayList<LinhaEncomenda>();
-        this.classificacao = 0;
-        this.custoTransporte = 0.0;
-        this.tempo = 0;
     }    
     
-    public Encomenda(String codenc, String codutil, String codloja, Double pes, ArrayList<LinhaEncomenda> le, int classi, double custo,int tempo){
+    public Encomenda(String codenc, String codutil, String loja, Double pes, ArrayList<LinhaEncomenda> le){
         this.codEncomenda = codenc;
         this.codUtilizador = codutil;
-        this.codLoja = codloja;
+        this.codLoja = loja;
         this.peso = pes;
         setLinha(le);
-        this.classificacao = classi;
-        this.custoTransporte = custo;
-        this.tempo = tempo;
     }    
     
     public Encomenda (Encomenda e){
@@ -43,9 +34,6 @@ public class Encomenda
         this.codLoja = e.getCodLoja();
         this.peso = e.getPeso();
         this.linha = e.getLinha();
-        this.classificacao = e.getClassificacao();
-        this.custoTransporte = e.getCustoTransporte();
-        this.tempo = e.getTempo();
     }  
     
     //Getters
@@ -59,7 +47,7 @@ public class Encomenda
     } 
     
     public String getCodLoja(){
-        return this.codEncomenda;    
+        return this.codLoja;    
     } 
     
     public Double getPeso(){
@@ -74,17 +62,6 @@ public class Encomenda
         return novo;
     }
     
-    public Integer getClassificacao(){ 
-        return this.classificacao;
-        }
-        
-    public Double getCustoTransporte(){
-        return this.custoTransporte;
-    }   
-    
-    public int getTempo(){ 
-     return this.tempo;
-    }
     //Setters
     
     public void setCodEncomenda(String codenco){
@@ -104,23 +81,13 @@ public class Encomenda
     } 
     
     public void setLinha(ArrayList<LinhaEncomenda> le){
-        linha.clear();
+        this.linha = new ArrayList<>();
         for(LinhaEncomenda l: le){
             this.linha.add(l.clone());
         }    
     }
     
-    public void setClassificacao(int classi){ 
-        this.classificacao = classi;
-        }
-    
-    public void setCustoTransporte(double custo){
-        this.custoTransporte = custo;
-    }
-    
-    public void setTempo(int tempo){
-      this.tempo = tempo;
-    }
+
     //toString
     
     public String toString(){
@@ -129,9 +96,7 @@ public class Encomenda
            append("Codigo Utilizador: ").append(this.codUtilizador).append("\n").
            append("Codigo Loja: ").append(this.codLoja).append("\n").
            append("Peso: ").append(this.peso).append("\n").
-           append("Linha Encomendada: ").append(this.linha.toString()).append("\n").
-           append("Classificaçao: ").append(this.classificacao).append("\n");
-           
+           append("Linha Encomendada: ").append(this.linha).append("\n");
         return sb.toString();    
     }    
     
@@ -145,10 +110,7 @@ public class Encomenda
              this.codUtilizador.equals(e.getCodUtilizador())&&
              this.codLoja.equals(e.getCodLoja())&&
              (this.peso == e.getPeso()) &&
-             this.linha.equals(e.getLinha()) &&
-             (this.classificacao == e.getClassificacao()) &&
-             this.custoTransporte == e.getCustoTransporte()&&
-             this.tempo == e.getTempo();
+             this.linha.equals(e.getLinha());
     } 
     
     //Clone
@@ -157,27 +119,20 @@ public class Encomenda
         return new Encomenda(this);
     }   
     
-    public double custo(Loja l, Utilizador u, Transportadora t){
-        int x = 0;
-        double distLoja = Math.sqrt(Math.pow(t.getGPSE().getX() + l.getGPSL().getX(), 2) - Math.pow(t.getGPSE().getY() + l.getGPSL().getY(), 2));
-        double distLojaCasa = Math.sqrt(Math.pow(l.getGPSL().getX() + u.getGPS().getX(), 2) - Math.pow(l.getGPSL().getY() + u.getGPS().getY(), 2));
-        for (LinhaEncomenda a: this.linha) {
-            x += a.getValorUnitario();
-        }    
-        double custo = x + this.getPeso() + (distLoja * t.getPrecoKm()) + (distLojaCasa * t.getPrecoKm());
-        return custo;
-    }
     
     //toStringCSV
     
     public String toStringCSV(){
        StringBuilder sb = new StringBuilder();
-       sb.append(this.codEncomenda).append(",")
+       sb.append("Encomenda:")
+         .append(this.codEncomenda).append(",")
          .append(this.codUtilizador).append(",")
          .append(this.codLoja).append(",")
-         .append(this.peso).append(",")
-         .append(this.linha).append(",")
-         .append(this.classificacao);
+         .append(this.peso);
+         for(LinhaEncomenda e: this.linha) {
+             sb.append(",")
+               .append(e.toStringCSV());
+            }   
        return sb.toString();  
    }    
 }

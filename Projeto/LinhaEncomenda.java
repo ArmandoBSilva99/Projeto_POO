@@ -1,5 +1,5 @@
-
-public class LinhaEncomenda
+import java.io.Serializable;
+public class LinhaEncomenda implements Serializable
 {
     //Variaveis
     
@@ -79,9 +79,29 @@ public class LinhaEncomenda
              (this.ValorUnitario == e.getValorUnitario());
     }
     
+    //toString
+    
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Codigo do Produto: ").append(this.codProduto).append(",")
+          .append("Descricao: ").append(this.Descricao).append(",")
+          .append("Quantidade: ").append(this.Quantidade).append(",")
+          .append("Valor Unitario: ").append(this.ValorUnitario);
+        return sb.toString();  
+    }    
+    
     //Clone
     
     public LinhaEncomenda clone(){
         return new LinhaEncomenda(this); 
+    }
+    
+    public String toStringCSV(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.codProduto).append(",")
+          .append(this.Descricao).append(",")
+          .append(this.Quantidade).append(",")
+          .append(this.ValorUnitario);
+        return sb.toString();  
     }    
 }

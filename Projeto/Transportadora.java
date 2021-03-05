@@ -1,5 +1,6 @@
 import java.util.*;
-public class Transportadora
+import java.io.Serializable;
+public class Transportadora implements Serializable
 {
     
    //Variaveis 
@@ -10,8 +11,9 @@ public class Transportadora
    private double raioE;
    private double precokm;
    private String pwT;
-   private List<Encomenda> encomendasConcluidas;
    private int classificacao;
+   private double faturado;
+   private double km;
    
    //Instancias
    public Transportadora(){
@@ -22,11 +24,12 @@ public class Transportadora
     this.raioE=0.0;
     this.precokm = 0.0;
     this.pwT = "0000";
-    this.encomendasConcluidas = new ArrayList<Encomenda>();
     this.classificacao = 0;
+    this.faturado = 0;
+    this.km =0;
     }
     
-   public Transportadora(String codigo,String nome,GPS gps,String nif,double raio,double precokm, String pw, List<Encomenda> enc,int classi){ 
+   public Transportadora(String codigo,String nome,GPS gps,String nif,double raio,double precokm, String pw,int classi, double fat,double km){ 
     this.codEmpresa= codigo;
     this.nomeE = nome;
     this.gpsE = gps.clone();
@@ -34,8 +37,9 @@ public class Transportadora
     this.raioE= raio;
     this.precokm = precokm;
     this.pwT = pw;
-    this.encomendasConcluidas = enc;
     this.classificacao = classi;
+    this.faturado = fat;
+    this.km = km;
     }
     
    public Transportadora(Transportadora t){
@@ -46,11 +50,15 @@ public class Transportadora
     this.precokm = t.getPrecoKm();
     this.raioE = t.getRaioE();
     this.pwT = t.getPwT();
-    this.encomendasConcluidas = t.getEncomendasConcluidas();
     this.classificacao = t.getClassificacao();
+    this.faturado = t.getFaturado();
+    this.km = t.getKm();
     }
     
    //Getters
+   public Double getKm(){
+      return this.km;
+    }
    public String getCodEmpresa(){ 
     return this.codEmpresa;
     }
@@ -78,17 +86,14 @@ public class Transportadora
    public String getPwT(){
        return this.pwT;
     } 
-    
-   public List<Encomenda> getEncomendasConcluidas(){
-       List<Encomenda> res = new ArrayList<>();
-       for(Encomenda e: this.encomendasConcluidas)
-            res.add(e.clone());
-       return res;     
-    }   
    
    public int getClassificacao(){ 
     return this.classificacao;
     }
+    
+   public double getFaturado(){
+       return this.faturado;
+    }    
    //Setters 
    public void setCodEmpresa(String codigo){ 
     this.codEmpresa = codigo;
@@ -118,16 +123,12 @@ public class Transportadora
        this.pwT = pw;
     }   
     
-   public void setEncomendasConcluidas(List<Encomenda> enc){
-       this.encomendasConcluidas = new ArrayList<>();
-       for(Encomenda e: enc)
-            this.encomendasConcluidas.add(e);     
-    }   
    
    public void setClassificacao(int classi){ 
      this.classificacao = classi;
     }
-   //toString 
+   
+    //toString 
    public String toString(){
        StringBuilder sb = new StringBuilder();
        sb.append("Codigo: ").append(this.codEmpresa).append("\n").
@@ -136,7 +137,9 @@ public class Transportadora
        append("Nif: ").append(this.nif).append("\n").
        append("Preço(p/km): ").append(this.precokm).append("\n").
        append("Raio: ").append(this.raioE).append("\n").
-       append("Classificação: ").append(this.classificacao).append("\n");
+       append("Classificação: ").append(this.classificacao).append("\n").
+       append("Faturado: ").append(this.faturado).append("\n").
+       append("Kilometros: ").append(this.km);
        return sb.toString();
        //Nao mostra password
     }   
@@ -161,34 +164,47 @@ public class Transportadora
     return new Transportadora(this);
     }
     
-   public void adicionaEncConcluida(Encomenda e){
-       this.encomendasConcluidas.add(e);
+   public void somaFat(double fati){
+       this.faturado += fati;
+    }    
+    
+   public void somakm(double km){ 
+    this.km += km;
     }
-    
-   public void registacusto(Encomenda e,Double custo){ 
-       e.setCustoTransporte(custo);
-   }
-    
-   public double faturado(){
-       double fat = 0; 
-       for(Encomenda e: this.encomendasConcluidas) {
-           fat += e.getCustoTransporte();
-        }
-       return fat; 
-    }  
     
    public String toStringCSV(){
        StringBuilder sb = new StringBuilder();
-       sb.append(this.codEmpresa).append(",")
+       sb.append("Transportadora:")
+         .append(this.codEmpresa).append(",")
          .append(this.nomeE).append(",")
-         .append(this.gpsE.getX()).append(",")
-         .append(this.gpsE.getY()).append(",")
+         .append(this.gpsE.getLongitude()).append(",")
+         .append(this.gpsE.getLatitude()).append(",")
          .append(this.nif).append(",")
          .append(this.raioE).append(",")
          .append(this.precokm).append(",")
-         .append(this.encomendasConcluidas).append(",")
+         .append(this.pwT).append(",")
          .append(this.classificacao).append(",")
-         .append(this.pwT);
+         .append(this.faturado).append(",")
+         .append(this.km);
        return sb.toString();  
    }     
+   
+   public boolean inRangeT(Loja l,Utilizador u) throws NullPointerException {
+        return (inRangeTtoL(l) && inRangeTtoU(u));
+    }
+  
+  
+  public boolean inRangeTtoL(Loja l){
+     return (Math.sqrt(Math.pow(this.gpsE.getLongitude() + l.getGPSL().getLongitude(), 2) - Math.pow(this.gpsE.getLatitude() + l.getGPSL().getLatitude(), 2)) < this.raioE); 
+  }
+  
+  public boolean inRangeTtoU(Utilizador u){
+      return (Math.sqrt(Math.pow(this.gpsE.getLongitude() + u.getGPS().getLongitude(), 2) - Math.pow(this.gpsE.getLatitude() + u.getGPS().getLatitude(), 2)) < this.raioE);
+    }
+   
+  public double inRangeTtoLkm(Loja l){
+     return Math.sqrt(Math.pow(this.gpsE.getLongitude() + l.getGPSL().getLongitude(), 2) - Math.pow(this.gpsE.getLatitude() + l.getGPSL().getLatitude(), 2)); 
+  }
+  
+  
 }

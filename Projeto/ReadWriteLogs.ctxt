@@ -1,0 +1,23 @@
+#BlueJ class context
+comment0.target=ReadWriteLogs
+comment1.params=nomeFich
+comment1.target=java.util.List\ lerFicheiroTexto(java.lang.String)
+comment10.params=nomeFicheiro\ app
+comment10.target=void\ escreveEmFicheiroTexto(java.lang.String,\ Login)
+comment2.params=nomeFicheiro\ app
+comment2.target=void\ leCSV(java.lang.String,\ Login)
+comment3.params=classe\ app
+comment3.target=void\ parseClass(java.lang.String,\ Login)
+comment4.params=utilizador\ app
+comment4.target=void\ parseUtilizador(java.lang.String,\ Login)
+comment5.params=voluntario\ app
+comment5.target=void\ parseVoluntario(java.lang.String,\ Login)
+comment6.params=transportadora\ app
+comment6.target=void\ parseTransportadora(java.lang.String,\ Login)
+comment7.params=loja\ app
+comment7.target=void\ parseLoja(java.lang.String,\ Login)
+comment8.params=encomenda\ app
+comment8.target=void\ parseEncomenda(java.lang.String,\ Login)
+comment9.params=encomenda\ app
+comment9.target=void\ parseEncomendaAceite(java.lang.String,\ Login)
+numComments=11
