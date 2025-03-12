@@ -4,4 +4,4 @@
 
 #### Contributors:
  - [Armando Silva](https://github.com/ArmandoBSilva99)
- - [André Sousa](https://github.com/Drex1904)
+ - [André Sousa](https://github.com/Andresousa24)
